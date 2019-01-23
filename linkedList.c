@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include<stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -6,31 +7,6 @@ typedef struct node{
     int value;
     struct node * next; //recursive
 }node_t;
-
-main(){
-    node_t * head = NULL;
-    head = malloc(sizeof(node_t));
-    if(head == NULL){return 1;}
-
-    head->value = 13;
-    head->next = malloc(sizeof(node_t));
-
-    head->next->value = 14;
-    head->next->next = NULL;
-    printList(head);
-
-
-
-    printf("Lets add new item at the end of the list \n");
-    int newItem; scanf("%d", &newItem);
-    pushEnd(head, newItem);
-
-    printf("Lets add item to the beginning \n");
-    int newItemBeg; scanf("%d", &newItemBeg);
-    pushBeg(head, newItemBeg);
-
-    pushAt(head, 14, 88);
-}
 
 
 
@@ -49,35 +25,30 @@ void pushEnd(node_t * head, int item){
 
 }
 
-void pushBeg(node_t * head, int item){
+node_t* pushBeg(node_t * head, int item){
     node_t * newNode;
-    newNode = malloc(sizeof(node_t));
+    newNode = (node_t *)malloc(sizeof(node_t));
     newNode -> value = item;
     newNode -> next = head;
     head = newNode;
     printList(head);
     printf("head->value from pushBeg func: %d \n", head->value);
+    return newNode;
 }
 
-void pushAt(node_t * head, int key, int item){
+node_t * pushAt(node_t * head, int key, int item){
     printf("head->value from pushAt func: %d \n", head->value);
 
-    /*
-    node_t * tempHead = head;
-    node_t * newNode;
-    newNode = malloc(sizeof(node_t));
-    newNode -> value = item;
-
+    node_t * tempHead;
+    tempHead = (node_t*)malloc(sizeof(node_t));
+    tempHead->value = item;
     while(head->value != key){
-        //printf("OK %d \n", head->value);
-
+        head = head->next;
     }
-    */
+    tempHead->next = head->next;
+    head->next = tempHead;
+    return head;
 }
-
-
-
-
 
 
 
@@ -86,10 +57,9 @@ void pushAt(node_t * head, int key, int item){
 void printList(node_t * head){
     //clr();
     printf("List is \n");
-    node_t * current = head;
-    while(current != NULL){
-        printf("%d \n", current->value);
-        current = current->next;
+    while(head != NULL){
+        printf("%d \n", head->value);
+        head = head->next;
     }
 }
 void clr()
@@ -99,13 +69,28 @@ void clr()
 
 
 
+main(){
+    node_t * head = NULL;
+    head = malloc(sizeof(node_t));
+    if(head == NULL){return 1;}
+
+    head->value = 13;
+    head->next = malloc(sizeof(node_t));
+
+    head->next->value = 14;
+    head->next->next = NULL;
+    printList(head);
 
 
+    printf("Lets add new item at the end of the list \n");
+    int newItem;
+    scanf("%d", &newItem);
+    pushEnd(head, newItem);
 
+    printf("Lets add item to the beginning \n");
+    int newItemBeg; scanf("%d", &newItemBeg);
+    head = pushBeg(head, newItemBeg);
 
-
-
-
-
-
-
+    pushAt(head, 14, 88);
+    printList(head);
+}
