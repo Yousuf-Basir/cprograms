@@ -1,2 +1,2 @@
 # cprograms
-My practice code of c program for data structer.
+My practice code of c programs for data structer.
